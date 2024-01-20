@@ -34,6 +34,7 @@ function ShowContent(){
     echo "<h1> Contenido del plugin </h1>";
     echo '<form method="post" action="">';
     echo '<input type="submit" name="btn_show_appointments" value="Mostrar Datos">';
+    echo '<input type="submit" name="btn_validate_before_cart" value="Validar Disponibilidad">';
     echo '</form>';
 
     if (isset($_POST['btn_show_appointments'])) {
@@ -67,54 +68,12 @@ function ShowContent(){
         echo '</table>';
     }
 
-    if (isset($_POST['btn_insert_appointment'])) {
-    global $wpdb;
+    if (isset($_POST['btn_validate_before_cart'])) {
+        add_filter('woocommerce_add_to_cart_validation', 'validar_disponibilidad_cupos', 1, 3);
 
-    // Define los valores para el nuevo registro
-    $kind = 'availability#product';
-    $kind_id = 1787;
-    $range_type = 'time:range';
-    $from_date = '2024-01-01';
-    $to_date = '2024-02-29';
-    $from_range = '16:45';
-    $to_range = '19:00';
-    $appointable = 'yes';
-    $priority = 4;
-    $qty = 14;
-    $ordering = 3;
-
-    // Crea el nuevo registro en la tabla wp_wc_appointments_availability
-    $wpdb->insert(
-        $wpdb->prefix . 'wc_appointments_availability',
-        array(
-            'kind' => $kind,
-            'kind_id' => $kind_id,
-            'range_type' => $range_type,
-            'from_date' => $from_date,
-            'to_date' => $to_date,
-            'from_range' => $from_range,
-            'to_range' => $to_range,
-            'appointable' => $appointable,
-            'priority' => $priority,
-            'qty' => $qty,
-            'ordering' => $ordering,
-        )
-    );
-
-    // Verifica si la inserción fue exitosa
-    if ($wpdb->insert_id) {
-        echo 'Registro insertado con éxito. ID del nuevo registro: ' . $wpdb->insert_id;
-    } else {
-        echo 'Error al insertar el registro.';
+        function validar_disponibilidad_cupos($passed, $product_id, $quantity) {
+            echo '<h1>¡El hook se ha activado correctamente!</h1>';
+            return $passed;
+        }
     }
-   }
-   // Hook para validar la disponibilidad de cupos antes de agregar al carrito
-   add_filter('woocommerce_add_to_cart_validation', 'validar_disponibilidad_cupos', 1, 3);
-
-   function validar_disponibilidad_cupos($passed, $product_id, $quantity) {
-     // Agregar un echo para imprimir un mensaje en la pantalla cuando se activa el hook
-     echo "<h1>¡El hook se ha activado correctamente!</h1>";
-    return $passed;
-   }
-
 }
