@@ -69,7 +69,9 @@ function ShowContent(){
     }
 
     if (isset($_POST['btn_validate_before_cart'])) {
+        echo '<h1>Pressed</h1>';
         add_filter('woocommerce_add_to_cart_validation', 'validar_disponibilidad_cupos', 1, 3);
+        echo '<h1>add filter</h1>';
 
         function validar_disponibilidad_cupos($passed, $product_id, $quantity) {
             echo '<h1>¡El hook se ha activado correctamente!</h1>';
