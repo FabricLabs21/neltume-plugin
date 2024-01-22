@@ -34,7 +34,6 @@ function ShowContent(){
     echo "<h1> Contenido del plugin </h1>";
     echo '<form method="post" action="">';
     echo '<input type="submit" name="btn_show_appointments" value="Mostrar Datos">';
-    echo '<input type="submit" name="btn_validate_before_cart" value="Validar Disponibilidad">';
     echo '</form>';
 
     if (isset($_POST['btn_show_appointments'])) {
@@ -68,14 +67,15 @@ function ShowContent(){
         echo '</table>';
     }
 
-    if (isset($_POST['btn_validate_before_cart'])) {
-        echo '<h1>Pressed</h1>';
-        add_filter('woocommerce_add_to_cart_validation', 'validar_disponibilidad_cupos', 1, 3);
-        echo '<h1>add filter</h1>';
+    // Hook to execute a validation before add to the cart
+    add_action('woocommerce_before_calculate_totals', 'before_add_to_cart');
 
-        function validar_disponibilidad_cupos($passed, $product_id, $quantity) {
-            echo '<h1>¡El hook se ha activado correctamente!</h1>';
-            return $passed;
-        }
+    function before_add_to_cart() {
+        $to = 'fgallardo@favric.cl';
+        $subject = 'Correo antes de agregar';
+        $message = 'Se está añadiendo algo al carrito.';
+
+        wp_mail($to, $subject, $message);
     }
+
 }
