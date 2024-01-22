@@ -2,7 +2,7 @@
 /*
 Plugin Name: Cupos Packs
 Description:  Plugin personalizado favric
-Version: 1.0.0
+Version: 2.0.0
 */
 
 function Activar(){
@@ -66,16 +66,15 @@ function ShowContent(){
 
         echo '</table>';
     }
+}
 
-    // Hook to execute a validation before add to the cart
-    add_action('woocommerce_before_calculate_totals', 'before_add_to_cart');
+// Hook to execute a validation before add to the cart
+add_action('woocommerce_before_calculate_totals', 'before_add_to_cart');
 
-    function before_add_to_cart() {
-        $to = 'fgallardo@favric.cl';
-        $subject = 'Correo antes de agregar';
-        $message = 'Se está añadiendo algo al carrito.';
+function before_add_to_cart() {
+    $to = 'fgallardo@favric.cl';
+    $subject = 'Correo antes de agregar';
+    $message = 'Se está añadiendo algo al carrito.';
 
-        wp_mail($to, $subject, $message);
-    }
-
+    wp_mail($to, $subject, $message);
 }
